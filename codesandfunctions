@@ -1,0 +1,48 @@
+%%%% flyplan on matlab
+%%%% written by mutenroshisama
+
+rU = input('Enter the long edge of the image(cm) : ');
+rK = input('Enter the short side of the image(cm) : ');
+Mk = input('Enter the denominator of scale for the planned map to be built : ');
+Lp = input('Çalışma alanının uçuş şeridi olarak kullanılacak kenarını giriniz(km) : ');
+Lq = input('Enter the edge of the work area to be used as flight strip(km) : ');
+Vg = input('Enter the speed of the aircraft at the hour(km/h) : ');
+ck = input('Enter calibrated focal length of camera(mm) : ');
+P = input('Enter longitudinally cover ratio : ');
+Q = input('Enter transverse cover ratio : ');
+c = input('Enter the Gruber coefficient(mm) : ');
+MS = input('Enter maneuver time(sn) : ');
+
+
+MB = c*sqrt(Mk);
+RU = rU * MB/100;
+RK = rK * MB/100;
+B = RU*(1-P/100); 
+A = RK*(1-Q/100);
+t = B/Vg*3600/1000;
+N = Lp/B + 4;
+Hg = MB*ck/1000;
+By = B/Hg;
+Sy = (Lq-RK)/A + 1;   
+Fm = RK*(RU-B)/1000000;    
+Fn = A*B/1000000;
+TR = N*Sy;
+RA = RU*RK/1000000;   
+US = (N-1)*t*Sy+(Sy-1)*MS;
+
+format long
+fprintf('\nThe length of the long side of the picture at the terrain(m) :  %f',RU);
+fprintf('\nThe length of the short side of the picture at the terrain(m) :  %f',RK);
+fprintf('\nImage scale 1 :  %f',MB);
+fprintf('\nFlight base length(m) :  %f',B);
+fprintf('\nDistance between strips(m) :  %f',A);
+fprintf('\nNumber of images in a strip :  %f',N);
+fprintf('\nBase height ratio :  %f',By);
+fprintf('\nNumber of strips :  %f',Sy);
+fprintf('\nExposure interval(sn) :  %f',t);
+fprintf('\nThe area covered in a residential site(km^2) :  %f',RA);
+fprintf('\nArea covered by the model(km^2) :  %f',Fm);
+fprintf('\nNewly acquired stereoscopic field(km^2) :  %f',Fn);
+fprintf('\nAverage flight height(m) :  %f',Hg);
+fprintf('\nTotal number of images :  %f',TR);
+fprintf('\nTotal flight time(dk) :  %f',US);
